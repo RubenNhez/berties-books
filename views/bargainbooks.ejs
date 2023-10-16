@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <h1><%=shopName%> shop</h1>
+    <link rel="stylesheet"  type="text/css" href="main.css" />
+  </head>
+  <body>
+    <p>List of bargain books:</p>
+    <ul>
+        <%for (var i=0; i<availableBooks.length; i++){%>
+            <% if(availableBooks[i].price < 20.00){%>
+        <li>
+            <%=availableBooks[i].name + ", " + availableBooks[i].price%>
+        </li>
+            <%}%>
+
+        <%}%>
+    </ul>
+    </p>
+
+
+  </body>
+</html>

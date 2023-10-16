@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <h1><%=shopName%> shop</h1>
+    <link rel="stylesheet"  type="text/css" href="main.css" />
+  </head>
+  <body>
+    <h1><%=shopName%> Results </h1>
+    <ul>
+        <%for (var i=0; i<searchBooks.length; i++) {%>
+        <li>
+            <%=searchBooks[i].name%>, <%=searchBooks[i].price%>
+        </li>
+
+        <%}%>
+    </ul>
+    </p>
+
+
+  </body>
+</html>
