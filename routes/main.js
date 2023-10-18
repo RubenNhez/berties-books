@@ -91,6 +91,8 @@ module.exports = function(app, shopData) {
             }
         })
 
+       
+
         // hashedPassword = sqlquery
 
         // bcrypt.compare(req.body.password, hashedPassword, function(err, result) {
@@ -110,10 +112,36 @@ module.exports = function(app, shopData) {
       
     })
 
+    
+    app.post('/delete', function (req,res) {
+        let sqlquery = 'DELETE FROM userdetails WHERE username = "' + req.body.username +'"'
+        let DeleteUsername = req.body.username
+
+        db.query(sqlquery, (err, result) => {
+            if (err) {
+                res.send('there was an error')
+            }
+            else {
+                if(result.affectedRows == 0) {
+                    res.send("No user with that username")
+                }
+                else{
+                    res.send("User " + DeleteUsername + "delete successfully!")
+                }
+            }
+            'SELECT hashedpassword FROM userdetails WHERE username ="' + req.body.username + '"'
+    })
+})
+
     //Login Page
     app.get('/login', function (req,res) {
         res.render('login.ejs', shopData);                                                                     
-    });     
+    }); 
+    
+    //Delete Page
+    app.get('/deleteuser', function (req,res) {
+        res.render('deleteuser.ejs', shopData);                                                                     
+    }); 
 
     //List of Users
     app.get('/listusers', function(req, res) {
