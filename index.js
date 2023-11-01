@@ -2,6 +2,7 @@
 var express = require ('express')
 var ejs = require('ejs')
 var bodyParser= require ('body-parser')
+var session = require('express-session')
 
 // Create the express application object
 const app = express()
@@ -25,6 +26,16 @@ db.connect((err) => {
     console.log('Connected to database');
 });
 global.db = db;
+
+//Create a session
+app.use(session({
+    secret: 'somerandomstuff',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 6000
+    }
+}))
 
 // Set up css
 app.use(express.static(__dirname + '/public'));

@@ -1,4 +1,12 @@
 module.exports = function(app, shopData) {
+    //Redirect Login
+    const redirectLogin = (req,res,next) => {
+        if (!req.session.userId) {
+            res.redirect('./login')
+        } else {next ();}
+    }
+
+
 
     // Handle our routes
     app.get('/',function(req,res){
@@ -81,7 +89,8 @@ module.exports = function(app, shopData) {
                     }
                     else if (result == true) {
                       // TODO: Send message
-                      res.send('That is the correct password')
+                    //   res.send('That is the correct password <a href=' + '/' + '>HOME</a>');
+                      req.session.userId = req.body.username;
                     }
                     else {
                       // TODO: Send message
@@ -91,7 +100,14 @@ module.exports = function(app, shopData) {
             }
         })
 
-       
+    app.get('/logout', redirectLogin, (req,res) => {
+        req.session.destroy(err => {
+            if (err) {
+                return res.redirect('./')
+            }
+            res.send('you are now logged out. <a href='+'./'+'>Home</a');
+        })
+    })   
 
         // hashedPassword = sqlquery
 
@@ -129,7 +145,6 @@ module.exports = function(app, shopData) {
                     res.send("User " + DeleteUsername + "delete successfully!")
                 }
             }
-            'SELECT hashedpassword FROM userdetails WHERE username ="' + req.body.username + '"'
     })
 })
 
@@ -160,12 +175,12 @@ module.exports = function(app, shopData) {
 
 
     //List of books
-    app.get('/list', function(req, res) {
+    app.get('/list',redirectLogin , function(req, res) {
         let sqlquery = "SELECT * FROM books"; //query database to get all the books
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
-                res.redirect('./');
+                return res.redirect('/');
             }
 
             let allusers = Object.assign({}, shopData, {availableBooks: result});
