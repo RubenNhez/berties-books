@@ -105,7 +105,7 @@ module.exports = function(app, shopData) {
             if (err) {
                 return res.redirect('./')
             }
-            res.send('you are now logged out. <a href='+'./'+'>Home</a');
+          
         })
     })   
 
