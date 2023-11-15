@@ -3,12 +3,28 @@ var express = require ('express')
 var ejs = require('ejs')
 var bodyParser= require ('body-parser')
 var session = require('express-session')
+var validator = require('express-validator')
+
 
 // Create the express application object
 const app = express()
 const port = 8000
 const mysql = require('mysql')
+const expressSanitizer = require('express-sanitizer');
 app.use(bodyParser.urlencoded({ extended: true }))
+
+
+app.use(expressSanitizer());
+
+//Create a session
+app.use(session({
+    secret: 'somerandomstuff',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 6000
+    }
+}))
 
 //Define the databse connection
 const db = mysql.createConnection ({
@@ -27,15 +43,7 @@ db.connect((err) => {
 });
 global.db = db;
 
-//Create a session
-app.use(session({
-    secret: 'somerandomstuff',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        expires: 6000
-    }
-}))
+
 
 // Set up css
 app.use(express.static(__dirname + '/public'));
