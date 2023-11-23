@@ -185,6 +185,31 @@ const { check, validationResult } = require ('express-validator');
     })
 
 
+    // Weather Forecast
+    app.get('/weather', function(req,res) {
+        const request = require('request');
+
+        let apiKey = '4066b0791a9932795eb1fe9004cb04f7';
+        let city = 'london';
+        let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+
+        request(url, function (err,response, body) {
+            if(err){
+                console.log('error:', error);
+            } else {
+                // res.send(body);
+                var weather = JSON.parse(body)
+                if (weather!==undefined && weather.main!== undefined) {
+                var wmsg = 'It is ' + weather.main.temp + ' degrees in ' + weather.name +  ' The maximum temp is ' + weather.main.temp_max + ' And the minimum temp is ' + weather.main.temp_min + '! <br> The humidity now is: ' + weather.main.humidity +  '! <br> The pressure now is: ' + weather.main.pressure;
+                res.send(wmsg);
+                }
+                else {
+                    res.send("No data found");
+                }
+            }
+        });
+    })
+
     //List of books
     app.get('/list',redirectLogin, function(req, res) {
         let sqlquery = "SELECT * FROM books"; //query database to get all the books
@@ -218,6 +243,22 @@ const { check, validationResult } = require ('express-validator');
         });
     
     });
+
+    app.get('/api', function (req,res) {
+        
+        // Query database to get all the books
+        let sqlquery = "SELECT * FROM books";
+
+        // Excute the sql query
+        db.query(sqlquery, (err, result) => {
+            if (err) {
+                res.redirect('./');
+            }
+            // Return results as a JSON object
+            res.json(result);
+        });
+    });
+
     //Bargain books
     app.get('/bargainbooks', function(req, res) {
         let sqlquery = "SELECT * FROM books"; //query database to get all the books
